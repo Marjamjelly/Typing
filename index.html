@@ -1,167 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Typing Test CLI</title>
-  <style>
-    body {
-      background: #000;
-      color: #0f0;
-      font-family: monospace;
-      padding: 20px;
-    }
-    #cli {
-      white-space: pre-wrap;
-      margin-bottom: 10px;
-    }
-    input {
-      background: none;
-      border: none;
-      color: #0f0;
-      font: inherit;
-      width: 100%;
-      outline: none;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <title>Typing Test</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="cli"></div>
-  <input type="text" id="input" autocomplete="off" autofocus />
-  <script>
-    const wordBank = `
-      the quick brown fox jumps over lazy dog fast type speed accuracy retro terminal minimal test
-      javascript html browser screen code cli interface skill fun game word black green text line
-    `.trim().split(/\s+/);
-
-    const cli = document.getElementById("cli");
-    const input = document.getElementById("input");
-
-    let state = "menu";
-    let mode = "";
-    let testWords = [];
-    let typedWords = [];
-    let limit = 0;
-    let timer = null;
-    let startTime = null;
-
-    function write(line = "") {
-      cli.textContent += line + "\n";
-      cli.scrollTop = cli.scrollHeight;
-    }
-
-    function clear() {
-      cli.textContent = "";
-    }
-
-    function prompt() {
-      write("> ");
-      input.value = "";
-      input.focus();
-    }
-
-    function showMenu() {
-      clear();
-      write("🧠 Typing Test CLI");
-      write("1. Timed Test (30s or 60s)");
-      write("2. Word Count Test (25 or 50 words)");
-      prompt();
-      state = "menu";
-    }
-
-    function startTest() {
-      clear();
-      typedWords = [];
-      write(`Start typing:\n`);
-      write(testWords.join(" ") + "\n");
-      prompt();
-      startTime = performance.now();
-      if (mode === "timed") {
-        timer = setTimeout(endTest, limit * 1000);
-      }
-    }
-
-    function endTest() {
-      const duration = (performance.now() - startTime) / 1000;
-      const typed = typedWords.join(" ");
-      const expected = testWords.slice(0, typedWords.length).join(" ");
-      const correct = [...typed].filter((c, i) => c === expected[i]).length;
-      const accuracy = expected.length ? ((correct / expected.length) * 100).toFixed(1) : "0.0";
-      const wpm = Math.round((typedWords.length / duration) * 60);
-
-      clear();
-      write(`⌛ Time: ${duration.toFixed(1)}s`);
-      write(`💬 WPM: ${wpm}`);
-      write(`✅ Accuracy: ${accuracy}%`);
-      write("\nPress ENTER to return to menu.");
-      state = "done";
-    }
-
-    function handleInput(text) {
-      if (state === "menu") {
-        if (text === "1") {
-          write("Timed test selected. Type 30 or 60:");
-          state = "timed-select";
-        } else if (text === "2") {
-          write("Word count test selected. Type 25 or 50:");
-          state = "wordcount-select";
-        } else {
-          write("Invalid option.");
-          prompt();
-        }
-      } else if (state === "timed-select") {
-        if (text === "30" || text === "60") {
-          mode = "timed";
-          limit = parseInt(text);
-          testWords = generateWords(200);
-          startTest();
-          state = "running";
-        } else {
-          write("Enter 30 or 60:");
-          prompt();
-        }
-      } else if (state === "wordcount-select") {
-        if (text === "25" || text === "50") {
-          mode = "wordcount";
-          limit = parseInt(text);
-          testWords = generateWords(limit);
-          startTest();
-          state = "running";
-        } else {
-          write("Enter 25 or 50:");
-          prompt();
-        }
-      } else if (state === "running") {
-        typedWords.push(...text.trim().split(/\s+/));
-        if (mode === "wordcount" && typedWords.length >= limit) {
-          endTest();
-        } else {
-          prompt();
-        }
-      } else if (state === "done") {
-        showMenu();
-      }
-    }
-
-    function generateWords(count) {
-      const out = [];
-      for (let i = 0; i < count; i++) {
-        out.push(wordBank[Math.floor(Math.random() * wordBank.length)]);
-      }
-      return out;
-    }
-
-    input.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        const value = input.value.trim();
-        if (value !== "") {
-          write("> " + value);
-          handleInput(value);
-        }
-      }
-    });
-
-    showMenu();
-  </script>
+  <div class="container">
+    <h1>Typing Test</h1>
+    <p id="sentence"></p>
+    <textarea id="input" placeholder="Start typing here..." disabled></textarea>
+    <div class="controls">
+      <button id="startBtn">Start Test</button>
+      <button id="resetBtn" disabled>Reset</button>
+    </div>
+    <div class="stats" id="stats"></div>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>
