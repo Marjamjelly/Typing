@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Typing Test CLI</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #0f0;
+      font-family: monospace;
+      padding: 20px;
+    }
+    #cli {
+      white-space: pre-wrap;
+    }
+    input {
+      background: none;
+      border: none;
+      color: #0f0;
+      font: inherit;
+      width: 100%;
+      outline: none;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="cli"></div>
+  <input type="text" id="input" autocomplete="off" autofocus />
+  
+  <script>
+    const wordBank = `
+      the quick brown fox jumps over the lazy dog typing test web cli minimal sentence input output
+      fast accurate monkey banana apple computer interface skill javascript design keyboard browser
+      green black terminal command prompt focus speed terminal retro accurate glitch matrix
+    `.trim().split(/\s+/);
+
+    const cli = document.getElementById('cli');
+    const input = document.getElementById('input');
+    let state = 'menu';
+    let testWords = [];
+    let typedWords = [];
+    let timer = null;
+    let startTime = null;
+    let durationLimit = null;
+    let currentWordIndex = 0;
+
+    function write(text = "") {
+      cli.innerText += text + "\n";
+      cli.scrollTop = cli.scrollHeight;
+    }
+
+    function clear() {
+      cli.innerText = "";
+    }
+
+    function prompt(text = "> ") {
+      write(text);
+      input.value = "";
+      input.focus();
+    }
+
+    function menu() {
+      clear();
+      write("🧠 Minimal Typing Test (Web CLI Edition)\n");
+      write("Choose test type:");
+      write("1. Timed Test (30s, 60s)");
+      write("2. Word Count Test (25, 50 words)");
+      prompt();
+      state = 'menu';
+    }
+
+    function startTest(words, mode, limit) {
+      clear();
+      testWords =
