@@ -6,21 +6,33 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="terminal-window">
-    <div id="window-bar">
-      <span class="window-btn close"></span>
-      <span class="window-btn min"></span>
-      <span class="window-btn max"></span>
-      <span class="window-title">terminal — Idle Hacker</span>
-    </div>
-    <div id="terminal">
-      <pre id="output"></pre>
-      <form id="input-form" autocomplete="off">
-        <span class="prompt">$</span>
-        <input id="input" type="text" autofocus autocomplete="off" spellcheck="false" />
-        <span class="blinking-cursor"></span>
-      </form>
-    </div>
+  <div id="main-layout">
+    <aside id="sidebar">
+      <div id="logo"></div>
+      <div id="stats-panel">
+        <h2>Stats</h2>
+        <div id="stats"></div>
+      </div>
+      <div id="quick-commands">
+        <h2>Quick Commands</h2>
+        <button onclick="runCommand('hack')">hack</button>
+        <button onclick="runCommand('upgrade')">upgrade</button>
+        <button onclick="runCommand('autohack')">autohack</button>
+        <button onclick="runCommand('status')">status</button>
+        <button onclick="runCommand('save')">save</button>
+        <button onclick="runCommand('load')">load</button>
+      </div>
+    </aside>
+    <main id="terminal-container">
+      <div id="terminal">
+        <pre id="output"></pre>
+        <form id="input-form" autocomplete="off">
+          <span class="prompt">$</span>
+          <input id="input" type="text" autofocus autocomplete="off" spellcheck="false" />
+          <span class="blinking-cursor"></span>
+        </form>
+      </div>
+    </main>
   </div>
   <script src="game.js"></script>
 </body>
