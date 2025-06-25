@@ -6,12 +6,21 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="terminal">
-    <pre id="output"></pre>
-    <form id="input-form" autocomplete="off">
-      <span class="prompt">&gt;</span>
-      <input id="input" type="text" autofocus autocomplete="off" />
-    </form>
+  <div id="terminal-window">
+    <div id="window-bar">
+      <span class="window-btn close"></span>
+      <span class="window-btn min"></span>
+      <span class="window-btn max"></span>
+      <span class="window-title">terminal — Idle Hacker</span>
+    </div>
+    <div id="terminal">
+      <pre id="output"></pre>
+      <form id="input-form" autocomplete="off">
+        <span class="prompt">$</span>
+        <input id="input" type="text" autofocus autocomplete="off" spellcheck="false" />
+        <span class="blinking-cursor"></span>
+      </form>
+    </div>
   </div>
   <script src="game.js"></script>
 </body>
