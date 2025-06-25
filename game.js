@@ -1,9 +1,11 @@
-// Terminal Idle Hacker Game - "real terminal" style
+// Terminal Idle Hacker Game - full-screen terminal layout with sidebar
 
 const output = document.getElementById('output');
 const input = document.getElementById('input');
 const form = document.getElementById('input-form');
 const cursor = document.querySelector('.blinking-cursor');
+const statsDiv = document.getElementById('stats');
+const logoDiv = document.getElementById('logo');
 
 let state = {
   credits: 0,
@@ -15,12 +17,12 @@ let state = {
 };
 
 const asciiLogo = [
-  "          _____           _        _ _           _             ",
-  "         |_   _|__   ___ | | _____| | | ___  ___| |_ ___  _ __ ",
-  "           | |/ _ \\ / _ \\| |/ / _ \\ | |/ _ \\/ __| __/ _ \\| '__|",
-  "           | | (_) | (_) |   <  __/ | |  __/ (__| || (_) | |   ",
-  "           |_|\\___/ \\___/|_|\\_\\___|_|_|\\___|\\___|\\__\\___/|_|   ",
-  "         Idle Hacker Terminal      Type 'help' to begin         "
+  "   _____           _        _ _           _      ",
+  "  |_   _|__   ___ | | _____| | | ___  ___| |_ ___",
+  "    | |/ _ \\ / _ \\| |/ / _ \\ | |/ _ \\/ __| __/ _ \\",
+  "    | | (_) | (_) |   <  __/ | |  __/ (__| || (_) |",
+  "    |_|\\___/ \\___/|_|\\_\\___|_|_|\\___|\\___|\\__\\___/ ",
+  "     Idle Hacker Terminal      Type 'help' to begin"
 ].join('\n');
 
 function print(text = '') {
@@ -50,6 +52,15 @@ function typePrint(text, speed = 0, cb) {
   type();
 }
 
+function updateStatsPanel() {
+  statsDiv.innerHTML =
+    `<strong>Credits:</strong> ${state.credits}<br>` +
+    `<strong>Hack Power:</strong> ${state.hackPower}<br>` +
+    `<strong>Upgrade Cost:</strong> ${state.upgradeCost}<br>` +
+    `<strong>AutoHack Level:</strong> ${state.autoHackLevel}<br>` +
+    `<strong>AutoHack Cost:</strong> ${state.autoHackCost}`;
+}
+
 function showStatus() {
   print(
     `Credits: ${state.credits}\n` +
@@ -58,6 +69,7 @@ function showStatus() {
     `AutoHack Level: ${state.autoHackLevel}\n` +
     `AutoHack Cost: ${state.autoHackCost}`
   );
+  updateStatsPanel();
 }
 
 function help() {
@@ -185,7 +197,14 @@ function process(cmd) {
     default:
       print(`Unknown command: "${command}". Type "help" for commands.`);
   }
+  updateStatsPanel();
 }
+
+// Quick command buttons
+window.runCommand = function runCommand(cmd) {
+  print(`$ ${cmd}`);
+  process(cmd);
+};
 
 // Blinking cursor handling (simulate after input)
 let inputFocused = true;
@@ -222,11 +241,13 @@ function tick() {
 
 function mainLoop() {
   tick();
+  updateStatsPanel();
   setTimeout(mainLoop, 1000);
 }
 
 // On load, show ASCII logo, help, status, and load game
 window.onload = () => {
+  logoDiv.textContent = asciiLogo;
   clearTerminal();
   typePrint(asciiLogo, 0, () => {
     help();
